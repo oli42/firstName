@@ -4,15 +4,9 @@ const favicon = require('serve-favicon')
 const cors = require('cors')
 const { success, failure } = require('./utils')
 let names = require('./nice-names')
-let pokemons = require('./mock-pokemons')
 
 const app = express()
 const port = 4000
-
-// app.use((req, res, next) =>{
-//     console.log(`URL : ${req.url}`)
-    // next()
-// })
 
 app
     .use(cors())
@@ -30,15 +24,12 @@ app.get('/names', (req, res) => {
 app.get('/names/:name', (req, res) => {
     const name = req.params.name;
     const matchingObjects = names.filter(obj => obj.name === name);
-    console.log('match', matchingObjects)
     const sum = matchingObjects.reduce((accumulator, currentValue) => accumulator + currentValue.nombre, 0);
     if(sum != 0){
-      console.log('sum', sum)
       const message = "success, an object was found "
       res.json(success(message,sum));
     }
     else{
-      console.log('no sum')
       message = 'No matching object found.'
       res.json(failure(message, sum));
 
@@ -55,12 +46,10 @@ app.get('/names/:name/:year', (req, res) => {
         res.json(success(message,result));
 
     }else{
-      res.status(404).send('No matching object found.');
+      message = 'No matching object found.'
+      res.json(failure(message, result));
     }
   });
-
-//   app.post('/names', (req, res) => {
-//   })
 
 
 app.listen(port, () => console.log(`app has started : http://localhost:${port}`))
